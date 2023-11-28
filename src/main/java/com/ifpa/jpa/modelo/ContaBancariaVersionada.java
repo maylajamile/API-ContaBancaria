@@ -1,14 +1,17 @@
 package com.ifpa.jpa.modelo;
 
+import java.util.Date;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 
 @Entity
-@Table(name = "contas")
-public class ContaBancaria {
+@Table(name = "contas_versionadas")
+public class ContaBancariaVersionada {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,12 +19,23 @@ public class ContaBancaria {
 	private String nomeCliente;
 	private float saldo;
 
-	public ContaBancaria() {}
+	@Version
+	private Date ultimaAlteracao;
 
-	public ContaBancaria(Long id, String nomeCliente, float saldo) {
+	public ContaBancariaVersionada() {}
+
+	public ContaBancariaVersionada(Long id, String nomeCliente, float saldo) {
 		this.setId(id);
 		this.setNomeCliente(nomeCliente);
 		this.setSaldo(saldo);
+	}
+
+	public Date getUltimaAlteracao() {
+		return ultimaAlteracao;
+	}
+
+	public void setUltimaAlteracao(Date ultimaAlteracao) {
+		this.ultimaAlteracao = ultimaAlteracao;
 	}
 
 	public Long getId() {
