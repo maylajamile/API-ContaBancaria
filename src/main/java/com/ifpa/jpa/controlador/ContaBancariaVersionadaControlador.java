@@ -3,6 +3,8 @@ package com.ifpa.jpa.controlador;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -26,32 +28,43 @@ public class ContaBancariaVersionadaControlador {
 	}
 
 	@PutMapping("/depositar/{id}")
-	public String depositar(@PathVariable Long id, @RequestParam float valor) {
+	public ResponseEntity<String> depositar(@PathVariable Long id, @RequestParam float valor) {
 		ContaBancariaVersionada conta = contasVersionadasRepositorio.findById(id).orElse(null);
 
 		if (conta != null) {
 			conta.setSaldo(conta.getSaldo() + valor);
-			contasVersionadasRepositorio.save(conta);
-			return "Depósito realizado com sucesso. Novo saldo: R$" + conta.getSaldo();
+			try {
+				contasVersionadasRepositorio.save(conta);
+			} catch (Exception e) {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+						.body("Não foi possível realizar essa requisição: " + e.getMessage());
+			}
+			return ResponseEntity.ok("Depósito realizado com sucesso. Novo saldo: R$" + conta.getSaldo());
 		} else {
-			return "Conta não encontrada.";
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Conta não encontrada.");
 		}
 	}
 
 	@PutMapping("/retirar/{id}")
-	public String retirar(@PathVariable Long id, @RequestParam float valor) {
+	public ResponseEntity<String> retirar(@PathVariable Long id, @RequestParam float valor) {
 		ContaBancariaVersionada conta = contasVersionadasRepositorio.findById(id).orElse(null);
 
 		if (conta != null) {
 			if (conta.getSaldo() >= valor) {
 				conta.setSaldo(conta.getSaldo() - valor);
-				contasVersionadasRepositorio.save(conta);
-				return "Retirada realizada com sucesso. Novo saldo: R$" + conta.getSaldo();
+				try {
+					contasVersionadasRepositorio.save(conta);
+				} catch (Exception e) {
+					return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+							.body("Não foi possível realizar essa requisição: " + e.getMessage());
+				}
+				return ResponseEntity.ok("Retirada realizada com sucesso. Novo saldo: R$" + conta.getSaldo());
 			} else {
-				return "Saldo insuficiente para realizar a retirada.";
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+						.body("Saldo insuficiente para realizar a retirada.");
 			}
 		} else {
-			return "Conta não encontrada.";
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Conta não encontrada.");
 		}
 	}
 
