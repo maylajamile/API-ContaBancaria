@@ -65,7 +65,7 @@ Ao executar os testes, você pode checar os resultados das requisições e suas 
 
 Para alterar o caminho da url para testar a entidade com versionamento, você deve seguir o seguinte caminho e alterar o valor da variável caminho para <em>"/contas/versionadas"</em>:
 
-<img src="https://cdn.discordapp.com/attachments/1221951787318378607/1221951859808272494/image.png?ex=6614725a&is=6601fd5a&hm=596045ca8903c4d1f90b25a03398a0211b7ac0bbf5b11caa2aaade7ba2c81776&" alt="Imagem Plano de Testes JMeter"/>
+<img src="https://cdn.discordapp.com/attachments/1221951787318378607/1221951859808272494/image.png?ex=6630ca9a&is=662f791a&hm=3605360089b5fa0d3dc06fdeb0c122cec30480ce1bc88290d73402f311986fa6&" alt="Imagem Plano de Testes JMeter">
 
 ## Ferramentas
 
